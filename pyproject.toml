@@ -1,0 +1,18 @@
+[project]
+name = "darwin-tests"
+version = "0.1.0"
+description = "A ToDo list API"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "dj-database-url>=3.0.1",
+    "django>=5.2.4",
+    "djangorestframework>=3.16.0",
+    "psycopg2-binary>=2.9.10",
+    "python-dotenv>=1.1.1",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.3",
+]

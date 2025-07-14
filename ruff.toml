@@ -1,0 +1,23 @@
+exclude = [
+    ".git",
+    "__pycache__",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".vscode",
+    ".venv",
+    "dist",
+    "build",
+    "migrations",
+    "migration",
+    "settings",
+]
+
+line-length = 100
+
+[lint.per-file-ignores]
+  # init modules can contain the local imports, logic, unused imports
+"__init__.py" = ["F401"]
+
+[lint]
+preview = true
+select = ["E", "F", "I", "C90"]
