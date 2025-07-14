@@ -1,5 +1,6 @@
 # ToDo API: testing assignment.
 A compact webservice to create and manage tasks.
+Built with Django REST Framework, with PostgreSQL support and JWT authorization.
 
 ## 1) Features
 - register and browse the list of available tasks;
@@ -46,6 +47,15 @@ A compact webservice to create and manage tasks.
     ```bash
     make run
     ```
+
+7) If you wish to use a DRF browsable API, uncomment the following line in the 'settings.py':
+    ```
+    REST_FRAMEWORK = {
+        'DEFAULT_RENDERER_CLASSES': [
+            ...
+            'rest_framework.renderers.BrowsableAPIRenderer',
+    ```
+
 ## 3) Available endpoints
 
 Unauthenticated users:
@@ -63,4 +73,3 @@ Authenticated users:
 `PUT`/`PATCH`: `api/task/{id}` - update an existing task (creator or assigned executor only)
 
 `DELETE`: `api/task/{id}` - delete an existing task (creator only)
-
