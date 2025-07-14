@@ -1,3 +1,4 @@
+# ruff: noqa
 """
 Django settings for todo project.
 

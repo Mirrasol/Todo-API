@@ -2,9 +2,9 @@ from django.contrib.auth import get_user_model
 from rest_framework import generics, viewsets
 from rest_framework.permissions import IsAuthenticated
 
+from api.models import Task
 from api.permissions import IsCreatorOrExecutor
 from api.serializers import TaskSerializer, UserSerializer
-from api.models import Task
 
 
 class UserCreateView(generics.CreateAPIView):

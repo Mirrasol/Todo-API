@@ -1,12 +1,14 @@
+# ruff: noqa: F841
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from rest_framework.test import APITestCase, APIClient
+from rest_framework.test import APIClient, APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
+
 from api.models import Task
 
 
 class UserTestCase(APITestCase):
-    fixtures = ['tasks.json','users.json']
+    fixtures = ['tasks.json', 'users.json']
 
     def setUp(self):
         self.client = APIClient()
