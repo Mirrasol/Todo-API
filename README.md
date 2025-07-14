@@ -58,11 +58,15 @@ Built with Django REST Framework, with PostgreSQL support and JWT authorization.
 
 ## 3) Available endpoints
 
-Unauthenticated users:
+New users:
 
 `POST`: `api/create-user/` - register a new user
 
-Authenticated users:
+Registered users:
+
+`POST`: `api/token/` - issue a pair of access tokens (short- and long-lived)
+
+`POST`: `api/token/refresh/` - use a long-lived access token to issue a new short-lived one
 
 `GET`: `api/task/` - browse the list of created tasks
 
