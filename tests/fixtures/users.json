@@ -1,0 +1,26 @@
+[
+  {
+    "model": "api.User",
+    "pk": 1,
+    "fields": {
+      "username": "Cambrian",
+      "password": "10101"
+    }
+  },
+  {
+    "model": "api.User",
+    "pk": 2,
+    "fields": {
+      "username": "Ordovician",
+      "password": "20202"
+    }
+  },
+    {
+    "model": "api.User",
+    "pk": 3,
+    "fields": {
+      "username": "Silurian",
+      "password": "30303"
+    }
+  }
+]
