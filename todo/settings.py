@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -132,6 +133,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Miscellaneous settings specific to the Project.
+
+AUTH_USER_MODEL = 'api.User'
 
 FIXTURE_DIRS = [
     'urlshortener/tests/fixtures',
