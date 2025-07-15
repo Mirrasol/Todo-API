@@ -60,7 +60,9 @@ Built with Django REST Framework, with PostgreSQL support and JWT authorization.
 
 New users:
 
-`POST`: `api/create-user/` - register a new user
+`GET`: `api/users/` - get the list of registered users
+
+`POST`: `api/users/` - register a new user
 
 Registered users:
 
@@ -68,12 +70,14 @@ Registered users:
 
 `POST`: `api/token/refresh/` - use a long-lived access token to issue a new short-lived one
 
-`GET`: `api/task/` - browse the list of created tasks
+`GET`: `api/tasks/` - browse the list of created tasks
 
-`POST`: `api/task/` - create a new task
+`POST`: `api/tasks/` - create a new task
 
-`GET`: `api/task/{id}` - read an existing task (creator or assigned executor only)
+`GET`: `api/tasks/{id}/` - read an existing task (creator or assigned executor only)
 
-`PUT`/`PATCH`: `api/task/{id}` - update an existing task (creator or assigned executor only)
+`PATCH`: `api/tasks/{id}/` - update an existing task (creator or assigned executor only)
 
-`DELETE`: `api/task/{id}` - delete an existing task (creator only)
+`DELETE`: `api/tasks/{id}/delete/` - delete an existing task (creator only)
+
+`PATCH`: `api/tasks/{id}/assign-permissions/` - assign status of the task's executor to another user (creator only)
