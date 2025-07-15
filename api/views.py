@@ -1,45 +1,62 @@
 from django.contrib.auth import get_user_model
-from rest_framework import generics, viewsets
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from api.models import Task
-from api.permissions import IsCreatorOrExecutor
-from api.serializers import TaskSerializer, UserSerializer
+from api.permissions import IsCreator, IsCreatorOrExecutor
+from api.serializers import (
+    PermissionsSerializer,
+    TaskCreateSerializer,
+    TaskUpdateSerializer,
+    UserSerializer,
+)
 
 
-class UserCreateView(generics.CreateAPIView):
+class UserListCreateView(generics.ListCreateAPIView):
     """
-    A view to register a new user.
+    A view to register a new user
+    or to get a list of registered users.
     """
     user = get_user_model()
     queryset = user.objects.all()
     serializer_class = UserSerializer
 
 
-class TaskViewSet(viewsets.ModelViewSet):
+class TaskListCreateView(generics.ListCreateAPIView):
     """
-    A view to work with new and existing tasks, depending on the 
-    provided permissions. Authenticated users only.
-    Create: all authenticated users.
-    Read/update: creator or executor of the task.
-    Delete: creator only.
+    A view to create a new task
+    or to get a list of created tasks.
     """
     queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated, IsCreatorOrExecutor]
+    serializer_class = TaskCreateSerializer
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
-    
-    def perform_update(self, serializer):
-        task = self.get_object()
-        if self.request.user == task.creator:
-            serializer.save()
-        elif self.request.user == task.executor:
-            name = self.request.data.get('name')
-            description = self.request.data.get('description')
-            if name:
-                task.name = name
-            if description:
-                task.description = description
-            task.save()
+
+
+class TaskReadUpdateView(generics.RetrieveUpdateAPIView):
+    """
+    A view to read or to update a task.
+    """
+    queryset = Task.objects.all()
+    serializer_class = TaskUpdateSerializer
+    permission_classes = [IsAuthenticated, IsCreatorOrExecutor]
+
+
+class TaskDeleteView(generics.DestroyAPIView):
+    """
+    A view to delete a task.
+    """
+    queryset = Task.objects.all()
+    serializer_class = TaskCreateSerializer
+    permission_classes = [IsAuthenticated, IsCreator]
+
+
+class AssignPermissionsView(generics.UpdateAPIView):
+    """
+    A view to manage permissions to access a task.
+    """
+    queryset = Task.objects.all()
+    serializer_class = PermissionsSerializer
+    permission_classes = [IsAuthenticated, IsCreator]

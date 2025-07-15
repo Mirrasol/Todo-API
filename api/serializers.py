@@ -9,11 +9,13 @@ class UserSerializer(serializers.ModelSerializer):
     """
     Custom User serializer.
     """
+    id = serializers.ReadOnlyField()
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = get_user_model()
         fields = [
+            'id',
             'username',
             'password',
         ]
@@ -23,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
         return super(UserSerializer, self).create(validated_data)
 
 
-class TaskSerializer(serializers.ModelSerializer):
+class TaskCreateSerializer(serializers.ModelSerializer):
     """
     Custom Task serializer.
     """
@@ -42,7 +44,47 @@ class TaskSerializer(serializers.ModelSerializer):
         ]
     
     def to_representation(self, instance):
-        rep = super(TaskSerializer, self).to_representation(instance)
+        rep = super(TaskCreateSerializer, self).to_representation(instance)
         rep['creator'] = instance.creator.username
+        rep['executor'] = instance.executor.username
+        return rep
+
+
+class TaskUpdateSerializer(serializers.ModelSerializer):
+    """
+    Custom Task's serializer for updating and reading.
+    """
+    id = serializers.ReadOnlyField()
+    creator = serializers.ReadOnlyField(source='creator.username')
+    executor = serializers.ReadOnlyField(source='executor.username')
+    
+    class Meta:
+        model = Task
+        fields = [
+            'id',
+            'name',
+            'description',
+            'creator',
+            'executor',
+        ]
+
+
+class PermissionsSerializer(serializers.ModelSerializer):
+    """
+    Custom Task's Permissions serializer.
+    """
+    id = serializers.ReadOnlyField()
+    name = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Task
+        fields = [
+            'id',
+            'name',
+            'executor',
+        ]
+    
+    def to_representation(self, instance):
+        rep = super(PermissionsSerializer, self).to_representation(instance)
         rep['executor'] = instance.executor.username
         return rep
