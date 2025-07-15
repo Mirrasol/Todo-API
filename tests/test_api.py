@@ -20,7 +20,7 @@ class UserTestCase(APITestCase):
             "username": "Devonian",
             "password": "50505",
         }
-        url = '/api/create-user/'
+        url = '/api/users/'
         response = self.client.post(url, format='json', data=new_user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     
@@ -31,7 +31,7 @@ class UserTestCase(APITestCase):
             "username": "Cambrian",
             "password": "50505",
         }
-        url = '/api/create-user/'
+        url = '/api/users/'
         response = self.client.post(url, format='json', data=new_user)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -51,7 +51,7 @@ class TaskTestCase(APITestCase):
         """
         Ensure unauthenticated user cannot create a new task.
         """
-        url = '/api/task/'
+        url = '/api/tasks/'
         data = {'name': 'Dangerous Task', 'description': 'Loh!', 'executor': 1}
         response = self.client.post(url, format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -65,7 +65,7 @@ class TaskTestCase(APITestCase):
             HTTP_AUTHORIZATION='Bearer ' + str(access_token)
         )
 
-        url = '/api/task/'
+        url = '/api/tasks/'
         data = {'name': 'Some Task', 'description': 'Loh!', 'executor': 1}
         response = self.client.post(url, format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -80,7 +80,7 @@ class TaskTestCase(APITestCase):
             HTTP_AUTHORIZATION='Bearer ' + str(access_token)
         )
 
-        url = '/api/task/2/'
+        url = '/api/tasks/2/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
     
@@ -93,7 +93,7 @@ class TaskTestCase(APITestCase):
             HTTP_AUTHORIZATION='Bearer ' + str(access_token)
         )
 
-        url = '/api/task/3/'
+        url = '/api/tasks/3/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['name'], 'Project C')
@@ -107,7 +107,7 @@ class TaskTestCase(APITestCase):
             HTTP_AUTHORIZATION='Bearer ' + str(access_token)
         )
 
-        url = '/api/task/2/'
+        url = '/api/tasks/2/'
         data = {"description": "Times Change"}
         response = self.client.patch(url, format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -125,7 +125,7 @@ class TaskTestCase(APITestCase):
             HTTP_AUTHORIZATION='Bearer ' + str(access_token)
         )
 
-        url = '/api/task/3/'
+        url = '/api/tasks/3/'
         data = {"description": "Times Change"}
         response = self.client.patch(url, format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -140,7 +140,7 @@ class TaskTestCase(APITestCase):
             HTTP_AUTHORIZATION='Bearer ' + str(access_token)
         )
 
-        url = '/api/task/3/'
+        url = '/api/tasks/3/assign-permissions/'
         data = {"executor": "1"}
         response = self.client.patch(url, format='json', data=data)
         self.assertEqual(Task.objects.get(pk=3).executor.id, 2)
@@ -154,11 +154,11 @@ class TaskTestCase(APITestCase):
             HTTP_AUTHORIZATION='Bearer ' + str(access_token)
         )
 
-        url = '/api/task/3/'
-        data = {"description": "Times Change"}
+        url = '/api/tasks/3/assign-permissions/'
+        data = {"executor": "1"}
         response = self.client.patch(url, format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Task.objects.get(pk=3).description, 'Times Change')
+        self.assertEqual(Task.objects.get(pk=3).executor.username, 'Cambrian')
     
     def test_delete_task_unauthorized(self):
         """
@@ -169,7 +169,7 @@ class TaskTestCase(APITestCase):
             HTTP_AUTHORIZATION='Bearer ' + str(access_token)
         )
 
-        url = '/api/task/2/'
+        url = '/api/tasks/2/delete/'
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(Task.objects.get(pk=2).name, 'Project B')
@@ -183,7 +183,7 @@ class TaskTestCase(APITestCase):
             HTTP_AUTHORIZATION='Bearer ' + str(access_token)
         )
 
-        url = '/api/task/3/'
+        url = '/api/tasks/3/delete/'
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Task.objects.contains(self.task3))
